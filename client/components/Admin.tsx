@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
 import { Trip, Testimonial } from '../types';
@@ -10,6 +11,7 @@ const API_URL_REVIEWS = `${API_BASE_URL}/api/reviews`;
 const Admin: React.FC = () => {
     const { t, language } = useLanguage();
     const { token, logout } = useAuth();
+    const navigate = useNavigate();
     const [activeTab, setActiveTab] = useState<'trails' | 'reviews'>('trails');
 
     // Trails State
@@ -229,9 +231,20 @@ const Admin: React.FC = () => {
                     <h1 className="text-3xl font-bold text-brand-accent uppercase tracking-widest">
                         {language === 'ar' ? 'لوحة التحكم' : 'Admin Dashboard (v1.0.1)'}
                     </h1>
-                    <button onClick={logout} className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">
-                        {language === 'ar' ? 'تسجيل خروج' : 'Logout'}
-                    </button>
+                    <div className="flex space-x-3">
+                        <button 
+                            onClick={() => navigate('/')} 
+                            className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded transition-colors"
+                        >
+                            {language === 'ar' ? '← الرئيسية' : '← Home'}
+                        </button>
+                        <button 
+                            onClick={() => { logout(); navigate('/'); }} 
+                            className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition-colors"
+                        >
+                            {language === 'ar' ? 'تسجيل خروج' : 'Logout'}
+                        </button>
+                    </div>
                 </div>
 
                 {/* Tabs */}

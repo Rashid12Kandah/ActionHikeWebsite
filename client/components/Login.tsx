@@ -91,6 +91,12 @@ const Login: React.FC = () => {
                         {language === 'ar' ? 'دخول' : 'Login'}
                     </button>
                 </form>
+                <button
+                    onClick={() => navigate('/')}
+                    className="w-full mt-4 bg-transparent border border-gray-600 text-gray-300 font-medium py-2 rounded hover:border-brand-accent hover:text-brand-accent transition-colors duration-300"
+                >
+                    {language === 'ar' ? '← العودة للرئيسية' : '← Back to Home'}
+                </button>
             </div>
         </div>
     );
