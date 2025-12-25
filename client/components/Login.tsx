@@ -15,12 +15,27 @@ const Login: React.FC = () => {
         e.preventDefault();
         setError('');
 
+        const apiUrl = import.meta.env.VITE_API_URL;
+        if (!apiUrl) {
+            setError('Configuration Error: VITE_API_URL is missing.');
+            return;
+        }
+
         try {
-            const res = await fetch('http://localhost:5000/api/auth/login', {
+            console.log(`Attempting login to: ${apiUrl}/api/auth/login`);
+            const res = await fetch(`${apiUrl}/api/auth/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ username, password })
             });
+
+            const contentType = res.headers.get("content-type");
+            if (!contentType || !contentType.includes("application/json")) {
+                // If response is not JSON (e.g. 404 HTML from Vercel), throw error
+                const text = await res.text();
+                console.error("Received non-JSON response:", text);
+                throw new Error(`Server returned ${res.status}: ${res.statusText}`);
+            }
 
             const data = await res.json();
 
@@ -30,8 +45,9 @@ const Login: React.FC = () => {
             } else {
                 setError(data.message || 'Login failed');
             }
-        } catch (err) {
-            setError('An error occurred. Please try again.');
+        } catch (err: any) {
+            console.error("Login error:", err);
+            setError(`Error: ${err.message || 'An error occurred'}`);
         }
     };
 
