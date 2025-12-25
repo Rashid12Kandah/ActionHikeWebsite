@@ -22,16 +22,17 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Function to seed admin user
 const seedAdminUser = async () => {
   try {
+    console.log('Checking for admin user...');
     const adminExists = await User.findOne({ username: 'admin' });
     if (!adminExists) {
       const admin = new User({ username: 'admin', password: 'admin123' });
       await admin.save();
-      console.log('Admin user created: username=admin, password=admin123');
+      console.log('SUCCESS: Admin user created - username: admin, password: admin123');
     } else {
-      console.log('Admin user already exists');
+      console.log('Admin user already exists, skipping seed');
     }
   } catch (err) {
-    console.error('Error seeding admin:', err);
+    console.error('Error seeding admin:', err.message);
   }
 };
 
