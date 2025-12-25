@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
 import { LanguageProvider } from './context/LanguageContext';
+import { API_BASE_URL } from './config';
 
 const rootElement = document.getElementById('root');
 if (!rootElement) {
@@ -9,7 +10,7 @@ if (!rootElement) {
 }
 
 console.log('App starting...');
-console.log('VITE_API_URL:', import.meta.env.VITE_API_URL);
+console.log('Using API URL:', API_BASE_URL);
 
 const root = ReactDOM.createRoot(rootElement);
 root.render(
