@@ -37,29 +37,43 @@ router.get('/', async (req, res) => {
 
 // POST a new trail (Protected)
 router.post('/', authMiddleware, upload.single('image'), async (req, res) => {
-  const { title, description, difficulty, price, link } = req.body;
-  
-  // Generate a key from title if not provided
-  const key = title.toLowerCase().replace(/\s+/g, '-');
-  
-  // Use Cloudinary URL
-  const imageUrl = req.file ? req.file.path : '';
-
-  const trail = new Trail({
-    key,
-    title,
-    description,
-    difficulty,
-    price,
-    link,
-    imageUrl
-  });
-
   try {
+    console.log('POST /api/trails - Request received');
+    console.log('Body:', req.body);
+    console.log('File:', req.file);
+    
+    const { title, description, difficulty, price, link } = req.body;
+    
+    if (!title || !description) {
+      return res.status(400).json({ message: 'Title and description are required' });
+    }
+    
+    // Generate a key from title if not provided
+    const key = title.toLowerCase().replace(/\s+/g, '-');
+    
+    // Use Cloudinary URL
+    const imageUrl = req.file ? req.file.path : '';
+    
+    if (!imageUrl) {
+      return res.status(400).json({ message: 'Image is required' });
+    }
+
+    const trail = new Trail({
+      key,
+      title,
+      description,
+      difficulty,
+      price,
+      link,
+      imageUrl
+    });
+
     const newTrail = await trail.save();
+    console.log('Trail saved successfully:', newTrail._id);
     res.status(201).json(newTrail);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    console.error('Error creating trail:', err);
+    res.status(500).json({ message: err.message || 'Server error creating trail' });
   }
 });
 
