@@ -8,6 +8,9 @@ if (!rootElement) {
   throw new Error("Could not find root element to mount to");
 }
 
+console.log('App starting...');
+console.log('VITE_API_URL:', import.meta.env.VITE_API_URL);
+
 const root = ReactDOM.createRoot(rootElement);
 root.render(
   <React.StrictMode>
