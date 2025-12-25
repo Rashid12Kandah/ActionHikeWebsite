@@ -3,8 +3,8 @@ import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
 import { Trip, Testimonial } from '../types';
 
-const API_URL_TRAILS = 'http://localhost:5000/api/trails';
-const API_URL_REVIEWS = 'http://localhost:5000/api/reviews';
+const API_URL_TRAILS = `${import.meta.env.VITE_API_URL}/api/trails`;
+const API_URL_REVIEWS = `${import.meta.env.VITE_API_URL}/api/reviews`;
 
 const Admin: React.FC = () => {
     const { t, language } = useLanguage();
@@ -34,6 +34,8 @@ const Admin: React.FC = () => {
     });
 
     useEffect(() => {
+        console.log('Admin Component Mounted. Version: 1.0.1');
+        console.log('API_URL_TRAILS:', API_URL_TRAILS);
         fetchTrails();
         fetchReviews();
     }, []);
@@ -224,7 +226,7 @@ const Admin: React.FC = () => {
             <div className="max-w-6xl mx-auto">
                 <div className="flex justify-between items-center mb-8">
                     <h1 className="text-3xl font-bold text-brand-accent uppercase tracking-widest">
-                        {language === 'ar' ? 'لوحة التحكم' : 'Admin Dashboard'}
+                        {language === 'ar' ? 'لوحة التحكم' : 'Admin Dashboard (v1.0.1)'}
                     </h1>
                     <button onClick={logout} className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded">
                         {language === 'ar' ? 'تسجيل خروج' : 'Logout'}
@@ -360,7 +362,7 @@ const Admin: React.FC = () => {
                                     <div key={trail._id || trail.key} className="flex items-center justify-between bg-brand-dark p-4 rounded border border-gray-700">
                                         <div className="flex items-center space-x-4 rtl:space-x-reverse">
                                             <img 
-                                                src={trail.imageUrl.startsWith('/uploads') ? `http://localhost:5000${trail.imageUrl}` : trail.imageUrl} 
+                                                src={trail.imageUrl.startsWith('/uploads') ? `${import.meta.env.VITE_API_URL}${trail.imageUrl}` : trail.imageUrl} 
                                                 alt={trail.title} 
                                                 className="w-16 h-16 object-cover rounded"
                                             />
