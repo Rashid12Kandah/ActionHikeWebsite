@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Trip } from '../types';
 import { useLanguage } from '../context/LanguageContext';
+import { API_BASE_URL } from '../config';
 
-const API_URL = 'http://localhost:5000/api/trails';
-const SERVER_URL = 'http://localhost:5000';
+const API_URL = `${API_BASE_URL}/api/trails`;
+const SERVER_URL = API_BASE_URL;
 
 const DifficultyBadge: React.FC<{ difficulty: Trip['difficulty'] }> = ({ difficulty }) => {
     const { t } = useLanguage();

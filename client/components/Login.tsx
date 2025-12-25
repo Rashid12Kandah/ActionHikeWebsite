@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
+import { API_BASE_URL } from '../config';
 
 const Login: React.FC = () => {
     const [username, setUsername] = useState('');
@@ -15,9 +16,9 @@ const Login: React.FC = () => {
         e.preventDefault();
         setError('');
 
-        const apiUrl = import.meta.env.VITE_API_URL;
+        const apiUrl = API_BASE_URL;
         if (!apiUrl) {
-            setError('Configuration Error: VITE_API_URL is missing.');
+            setError('Configuration Error: API_BASE_URL is missing.');
             return;
         }
 

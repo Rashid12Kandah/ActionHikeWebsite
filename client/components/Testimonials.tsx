@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Testimonial } from '../types';
 import { useLanguage } from '../context/LanguageContext';
+import { API_BASE_URL } from '../config';
 
-const API_URL = 'http://localhost:5000/api/reviews';
+const API_URL = `${API_BASE_URL}/api/reviews`;
 
 const TestimonialCard: React.FC<{ testimonial: Testimonial }> = ({ testimonial }) => {
     const { t } = useLanguage();

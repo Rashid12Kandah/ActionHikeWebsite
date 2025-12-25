@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
 import { Trip, Testimonial } from '../types';
+import { API_BASE_URL } from '../config';
 
-const API_URL_TRAILS = `${import.meta.env.VITE_API_URL}/api/trails`;
-const API_URL_REVIEWS = `${import.meta.env.VITE_API_URL}/api/reviews`;
+const API_URL_TRAILS = `${API_BASE_URL}/api/trails`;
+const API_URL_REVIEWS = `${API_BASE_URL}/api/reviews`;
 
 const Admin: React.FC = () => {
     const { t, language } = useLanguage();
@@ -362,7 +363,7 @@ const Admin: React.FC = () => {
                                     <div key={trail._id || trail.key} className="flex items-center justify-between bg-brand-dark p-4 rounded border border-gray-700">
                                         <div className="flex items-center space-x-4 rtl:space-x-reverse">
                                             <img 
-                                                src={trail.imageUrl.startsWith('/uploads') ? `${import.meta.env.VITE_API_URL}${trail.imageUrl}` : trail.imageUrl} 
+                                                src={trail.imageUrl.startsWith('/uploads') ? `${API_BASE_URL}${trail.imageUrl}` : trail.imageUrl} 
                                                 alt={trail.title} 
                                                 className="w-16 h-16 object-cover rounded"
                                             />
