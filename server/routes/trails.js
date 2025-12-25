@@ -7,6 +7,12 @@ const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const Trail = require('../models/Trail');
 const authMiddleware = require('../middleware/authMiddleware');
 
+// Log Cloudinary config status
+console.log('Cloudinary Config Check:');
+console.log('- CLOUDINARY_CLOUD_NAME:', process.env.CLOUDINARY_CLOUD_NAME ? 'SET' : 'MISSING');
+console.log('- CLOUDINARY_API_KEY:', process.env.CLOUDINARY_API_KEY ? 'SET' : 'MISSING');
+console.log('- CLOUDINARY_API_SECRET:', process.env.CLOUDINARY_API_SECRET ? 'SET' : 'MISSING');
+
 // Configure Cloudinary
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -25,6 +31,17 @@ const storage = new CloudinaryStorage({
 
 const upload = multer({ storage: storage });
 
+// Wrapper to catch multer errors
+const uploadWithErrorHandling = (req, res, next) => {
+  upload.single('image')(req, res, (err) => {
+    if (err) {
+      console.error('Multer/Cloudinary upload error:', err);
+      return res.status(500).json({ message: 'Image upload failed: ' + err.message });
+    }
+    next();
+  });
+};
+
 // GET all trails
 router.get('/', async (req, res) => {
   try {
@@ -33,10 +50,11 @@ router.get('/', async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
+  }
 });
 
 // POST a new trail (Protected)
-router.post('/', authMiddleware, upload.single('image'), async (req, res) => {
+router.post('/', authMiddleware, uploadWithErrorHandling, async (req, res) => {
   try {
     console.log('POST /api/trails - Request received');
     console.log('Body:', req.body);
@@ -91,7 +109,7 @@ router.delete('/:id', authMiddleware, async (req, res) => {
 });
 
 // PUT (Update) a trail (Protected)
-router.put('/:id', authMiddleware, upload.single('image'), async (req, res) => {
+router.put('/:id', authMiddleware, uploadWithErrorHandling, async (req, res) => {
   try {
     const trail = await Trail.findById(req.params.id);
     if (!trail) return res.status(404).json({ message: 'Trail not found' });
